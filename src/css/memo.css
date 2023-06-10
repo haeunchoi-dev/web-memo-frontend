@@ -1,0 +1,29 @@
+html {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  height: 98%;
+  padding: 8px;
+  margin: 0;
+}
+
+#header,
+#editor {
+  outline: none;
+}
+
+#editor {
+  height: calc(100% - 200px);
+  overflow: auto;
+}
+
+.placeholder {
+  color: #b3b1b1;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  color: gray;
+}
