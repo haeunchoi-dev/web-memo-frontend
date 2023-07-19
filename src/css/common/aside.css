@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+}
+
+.aside-tab {
+  position: absolute;
+  background-color: rgb(250, 250, 250);
+  width: 11.25rem;
+  z-index: 40;
+  height: calc(100vh - 50px);
+}
+
+.categories {
+  --height: 1.25;
+  max-height: 100vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0px;
+  padding: 10px;
+}
+
+.bd-categories-filter {
+  margin-bottom: 1em;
+  position: relative;
+}
+
+.bd-categories-filter .input {
+  font-size: 0.75rem;
+  height: 30px;
+  margin-top: 10px;
+  box-shadow: rgba(10, 10, 10, 0.05) 0px 0.0625em 0.125em inset;
+  max-width: 100%;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  color: rgb(54, 54, 54);
+  border-color: rgb(219, 219, 219);
+  border-radius: 0.375em;
+}
+
+.bd-category-group {
+  color: rgb(181, 181, 181);
+  font-size: 0.625em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  margin-bottom: calc(var(--docs-side-padding) / 2);
+  margin-top: var(--docs-side-padding);
+  text-transform: uppercase;
+}
