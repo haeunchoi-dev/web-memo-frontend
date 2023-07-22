@@ -1,13 +1,10 @@
-* {
-  box-sizing: border-box;
-}
-
 .aside-tab {
   position: absolute;
   background-color: rgb(250, 250, 250);
   width: 11.25rem;
   z-index: 40;
   height: calc(100vh - 50px);
+  box-sizing: border-box;
 }
 
 .categories {
@@ -35,6 +32,7 @@
   color: rgb(54, 54, 54);
   border-color: rgb(219, 219, 219);
   border-radius: 0.375em;
+  box-sizing: border-box;
 }
 
 .bd-category-group {

@@ -16,8 +16,11 @@ class Header extends HTMLElement {
   }
 
   render() {
+    this.setStyle();
+    const header = document.createElement('header');
+    header.classList.add('main-header');
+
     const template = `
-        <header class="main-header">
             <div>
                 <a class="main-header__brand"> Memo </a>
             </div>
@@ -31,11 +34,10 @@ class Header extends HTMLElement {
                 </li>
                 </ul>
             </nav>
-        </header>
         `;
 
-    this.shadow.innerHTML = template;
-    this.setStyle();
+    header.innerHTML = template;
+    this.shadow.appendChild(header);
   }
 }
 

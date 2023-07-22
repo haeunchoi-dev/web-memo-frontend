@@ -16,25 +16,26 @@ class Aside extends HTMLElement {
   }
 
   render() {
-    const template = `
-        <aside class="aside-tab">
-            <nav class="categories">
-                <div class="bd-categories-filter">
-                <input
-                    id="categoriesFilter"
-                    class="input"
-                    type="text"
-                    name=""
-                    placeholder="Filter"
-                />
-                </div>
-                <p class="bd-category-group">Group</p>
-            </nav>
-        </aside>
-          `;
-
-    this.shadow.innerHTML = template;
     this.setStyle();
+    const aside = document.createElement('aside');
+    aside.classList.add('aside-tab');
+
+    const template = `
+                    <nav class="categories">
+                        <div class="bd-categories-filter">
+                        <input
+                            id="categoriesFilter"
+                            class="input"
+                            type="text"
+                            name=""
+                            placeholder="Filter"
+                        />
+                        </div>
+                        <p class="bd-category-group">Group</p>
+                    </nav>
+                    `;
+    aside.innerHTML = template;
+    this.shadow.appendChild(aside);
   }
 }
 
