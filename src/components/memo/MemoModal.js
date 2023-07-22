@@ -1,3 +1,6 @@
+import '../container/TitleContainer.js';
+import '../container/TextContainer.js';
+
 class MemoModal extends HTMLElement {
   constructor() {
     super();
@@ -17,8 +20,8 @@ class MemoModal extends HTMLElement {
 
     style.textContent = `
         .modal {
-          width: 300px;
-          padding: 20px 60px;
+          width: 500px;
+          padding: 35px 20px 20px 20px;
           background-color: #fefefe;
           border: 1px solid #888;
           border-radius: 3px;
@@ -42,6 +45,12 @@ class MemoModal extends HTMLElement {
           top: 10px;
           right: 10px;
           cursor: pointer;
+
+          background-color: orange;
+          border-radius: 10%;
+          padding: 5px;
+          color: white;
+          font-weight: bold;
         }
 
         .modal_bg {
@@ -56,6 +65,11 @@ class MemoModal extends HTMLElement {
           overflow: auto;
           background-color: rgba(0, 0, 0, 0.4);
         }
+
+        .modal_main {
+          height: 500px;
+          overflow-y: auto;
+        }
     `;
 
     // Attach the created elements to the shadow dom
@@ -65,7 +79,10 @@ class MemoModal extends HTMLElement {
   render() {
     const template = `
     <div class="modal">
-      <div style="height: 500px;"></div>
+      <title-container></title-container>
+      <div class="modal_main">
+        <text-container></text-container>
+      </div>
       <a class="modal_close_btn">닫기</a>
     </div>
     <div class="modal_bg"></div>  
