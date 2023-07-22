@@ -102,7 +102,7 @@ class MemoModal extends HTMLElement {
   render() {
     const template = `
     <div class="modal">
-      <title-container></title-container>
+      <title-container title=${this.state.title}></title-container>
       <div class="modal_main">
         <text-container></text-container>
       </div>
@@ -124,15 +124,28 @@ class MemoModal extends HTMLElement {
         //닫기 호출
         self._handleModalCloseCallback(false);
       });
+
+    this.handleTitle = this.handleTitle.bind(this);
+    const titleContainer = self.shadow.querySelector('title-container');
+    if (titleContainer) {
+      titleContainer.handleTitleCallback = self.handleTitle;
+    }
   }
 
   initState() {
-    this.state = { isOpen: this.isOpen };
+    this.state = { title: '' };
   }
 
-  setState(newState) {
+  setState(newState, isRender = true) {
     this.state = { ...this.state, ...newState };
-    this.render();
+    if (isRender) {
+      this.render();
+    }
+    console.log(this.state);
+  }
+
+  handleTitle(value) {
+    this.setState({ ...this.state, title: value }, false);
   }
 
   get isOpen() {

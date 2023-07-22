@@ -27,7 +27,7 @@ class TitleContainer extends HTMLElement {
 
   render() {
     const template = `
-        <h2 contenteditable="true"></h2>
+        <h2 contenteditable="true">${this.title}</h2>
     `;
 
     this.shadow.innerHTML = template;
@@ -66,6 +66,12 @@ class TitleContainer extends HTMLElement {
         addPlaceHolder();
       }
     });
+
+    $editableHeading.addEventListener('keyup', function (e) {
+      //console.log(e.target.innerHTML);
+      //디바운싱을 적용할 수 있을까?
+      self._handleTitleCallback(e.target.innerHTML);
+    });
   }
 
   initState() {
@@ -75,6 +81,15 @@ class TitleContainer extends HTMLElement {
   setState(newState) {
     this.state = { ...this.state, ...newState };
     this.render();
+  }
+
+  get title() {
+    return this.getAttribute('title') || '';
+  }
+
+  set handleTitleCallback(callback) {
+    //console.log(callback);
+    this._handleTitleCallback = callback;
   }
 }
 
