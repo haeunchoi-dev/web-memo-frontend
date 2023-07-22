@@ -1,5 +1,8 @@
 import './common/Header.js';
 import './common/Aside.js';
+import './memo/MemoList.js';
+
+import Store from '../libs/store.js';
 
 class MemoApp extends HTMLElement {
   constructor() {
@@ -8,9 +11,12 @@ class MemoApp extends HTMLElement {
     this.shadow = this.attachShadow({ mode: 'open' });
   }
 
-  connectedStore() {}
+  connectedStore() {
+    this.store = new Store('memo-vanilla-es6');
+  }
 
   connectedCallback() {
+    console.log('memo start');
     this.render();
   }
 
@@ -26,11 +32,7 @@ class MemoApp extends HTMLElement {
         <memo-header></memo-header>
         <memo-aside></memo-aside>
         <main class="main">
-            <section class="memo-list">
-                <div class="memo">
-                  <img src="./assets/plus.png" width="100px" />
-                </div>
-            </section>
+          <memo-list></memo-list>
         </main>
     `;
 
