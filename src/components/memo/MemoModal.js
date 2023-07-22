@@ -46,11 +46,15 @@ class MemoModal extends HTMLElement {
           right: 10px;
           cursor: pointer;
 
-          background-color: orange;
+          background-color: rgb(250 160 40);
           border-radius: 10%;
           padding: 5px;
           color: white;
           font-weight: bold;
+        }
+
+        .modal .modal_close_btn:hover {
+          background: rgb(255, 146, 0);
         }
 
         .modal_bg {
@@ -69,6 +73,25 @@ class MemoModal extends HTMLElement {
         .modal_main {
           height: 500px;
           overflow-y: auto;
+        }
+
+        .modal_main::-webkit-scrollbar {
+          width: 8px;  /* 스크롤바의 너비 */
+        }
+      
+        .modal_main::-webkit-scrollbar-thumb {
+            //height: 30%; /* 스크롤바의 길이 */
+            background: rgb(250 160 40); /* 스크롤바의 색상 */
+            
+            border-radius: 10px;
+        }
+
+        .modal_main::-webkit-scrollbar-thumb:hover {
+          background: rgb(255, 146, 0);
+        }
+      
+        .modal_main::-webkit-scrollbar-track {
+            background: rgb(244 140 33 / 10%);  /*스크롤바 뒷 배경 색상*/
         }
     `;
 
