@@ -104,11 +104,13 @@ class MemoModal extends HTMLElement {
     <div class="modal">
       <title-container title=${this.state.title}></title-container>
       <div class="modal_main">
-        ${this.state.containerList.map((o, i) => {
-          return `<text-container index="${i}" value=${JSON.stringify(
-            o,
-          )} ></text-container>`;
-        })}
+        ${this.state.containerList
+          .map((o, i) => {
+            return `<text-container index="${i}" value=${JSON.stringify(
+              o,
+            )} ></text-container>`;
+          })
+          .join('')}
       </div>
       <a class="modal_close_btn">닫기</a>
     </div>
@@ -121,6 +123,33 @@ class MemoModal extends HTMLElement {
 
   setEvent() {
     const self = this;
+
+    self.shadow
+      .querySelector('.modal_main')
+      .addEventListener('keypress', (e) => {
+        const isShiftKey = e.shiftKey;
+
+        const keyCode = e.keyCode || e.which;
+
+        if (keyCode === 13 && isShiftKey) {
+          console.log('Shift + Enter pressed');
+        } else if (keyCode === 13) {
+          console.log('Enter pressed');
+
+          const closestContainer = e.target.closest('text-container');
+          console.log(closestContainer);
+          const index = Number(closestContainer.getAttribute('index'));
+          const newContainerList = [...self.state.containerList];
+          newContainerList.splice(index + 1, 0, {
+            //id: index + 1, //id를 생성해주는 로직 작성하기
+            text: '',
+            type: 'text',
+          });
+          self.setState({ containerList: newContainerList });
+          //커서 강제로 이동시키기
+        }
+      });
+
     self.shadow
       .querySelector('.modal_close_btn')
       .addEventListener('click', ({ target }) => {
@@ -145,7 +174,7 @@ class MemoModal extends HTMLElement {
   initState() {
     this.state = {
       title: '',
-      containerList: [{ id: 1, text: '', type: 'text' }],
+      containerList: [{ id: 0, text: '', type: 'text' }],
     };
   }
 
