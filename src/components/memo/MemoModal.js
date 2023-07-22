@@ -104,7 +104,11 @@ class MemoModal extends HTMLElement {
     <div class="modal">
       <title-container title=${this.state.title}></title-container>
       <div class="modal_main">
-        <text-container></text-container>
+        ${this.state.containerList.map((o, i) => {
+          return `<text-container index="${i}" value=${JSON.stringify(
+            o,
+          )} ></text-container>`;
+        })}
       </div>
       <a class="modal_close_btn">닫기</a>
     </div>
@@ -125,15 +129,24 @@ class MemoModal extends HTMLElement {
         self._handleModalCloseCallback(false);
       });
 
-    this.handleTitle = this.handleTitle.bind(this);
+    self.handleTitle = self.handleTitle.bind(self);
     const titleContainer = self.shadow.querySelector('title-container');
     if (titleContainer) {
       titleContainer.handleTitleCallback = self.handleTitle;
     }
+
+    self.handleContainerUpdate = self.handleContainerUpdate.bind(self);
+    const containers = self.shadow.querySelectorAll('text-container');
+    containers.forEach((o) => {
+      o.handleContainerUpdateCallback = self.handleContainerUpdate;
+    });
   }
 
   initState() {
-    this.state = { title: '' };
+    this.state = {
+      title: '',
+      containerList: [{ id: 1, text: '', type: 'text' }],
+    };
   }
 
   setState(newState, isRender = true) {
@@ -145,7 +158,13 @@ class MemoModal extends HTMLElement {
   }
 
   handleTitle(value) {
-    this.setState({ ...this.state, title: value }, false);
+    this.setState({ title: value }, false);
+  }
+
+  handleContainerUpdate(index, value) {
+    const newContainerList = [...this.state.containerList];
+    newContainerList[index] = value;
+    this.setState({ containerList: newContainerList }, false);
   }
 
   get isOpen() {
