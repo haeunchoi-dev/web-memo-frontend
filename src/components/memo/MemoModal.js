@@ -106,9 +106,7 @@ class MemoModal extends HTMLElement {
       <div class="modal_main">
         ${this.state.containerList
           .map((o, i) => {
-            return `<text-container index="${i}" value=${JSON.stringify(
-              o,
-            )} ></text-container>`;
+            return `<text-container index="${i}" id=${o.id} type=${o.type} text="${o.text}"} ></text-container>`;
           })
           .join('')}
       </div>
@@ -174,7 +172,7 @@ class MemoModal extends HTMLElement {
   initState() {
     this.state = {
       title: '',
-      containerList: [{ id: 0, text: '', type: 'text' }],
+      containerList: [{ text: '', type: 'text' }],
     };
   }
 

@@ -23,7 +23,7 @@ class TextContainer extends HTMLElement {
 
   render() {
     const template = `
-        <div contenteditable="true">${this.value.text}</div>
+        <div contenteditable="true">${this.text}</div>
       `;
 
     this.shadow.innerHTML = template;
@@ -37,14 +37,15 @@ class TextContainer extends HTMLElement {
     const $editableDiv = self.shadow.querySelector('div');
     $editableDiv.addEventListener('keyup', function (e) {
       self._handleContainerUpdateCallback(self.index, {
-        ...self.value,
+        id: self.id,
+        type: self.type,
         text: e.target.innerHTML,
       });
     });
   }
 
   initState() {
-    console.log(this.index, this.value);
+    console.log(this.index, this.text);
     this.state = { isModalOpen: false };
   }
 
@@ -59,11 +60,20 @@ class TextContainer extends HTMLElement {
   }
 
   get index() {
-    return this.getAttribute('index');
+    return Number(this.getAttribute('index'));
   }
 
-  get value() {
-    return JSON.parse(this.getAttribute('value'));
+  get id() {
+    //id가 없다면 생성
+    return this.getAttribute('id') || 0;
+  }
+
+  get type() {
+    return this.getAttribute('type') || 'text';
+  }
+
+  get text() {
+    return this.getAttribute('text') || '';
   }
 }
 
