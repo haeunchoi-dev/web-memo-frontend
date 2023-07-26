@@ -34,13 +34,21 @@ class TextContainer extends HTMLElement {
   setEvent() {
     const self = this;
 
+    //디바운싱 적용
+    let textTimer;
     const $editableDiv = self.shadow.querySelector('div');
     $editableDiv.addEventListener('keyup', function (e) {
-      self._handleContainerUpdateCallback(self.index, {
-        id: self.id,
-        type: self.type,
-        text: e.target.innerHTML,
-      });
+      const textValue = e.target.innerHTML;
+      if (textTimer) {
+        clearTimeout(textTimer);
+      }
+      textTimer = setTimeout(function () {
+        self._handleContainerUpdateCallback(self.index, {
+          id: self.id,
+          type: self.type,
+          text: textValue,
+        });
+      }, 200);
     });
   }
 
