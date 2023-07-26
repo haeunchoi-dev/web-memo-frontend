@@ -67,10 +67,16 @@ class TitleContainer extends HTMLElement {
       }
     });
 
+    //디바운싱 적용
+    let titleTimer;
     $editableHeading.addEventListener('keyup', function (e) {
-      //console.log(e.target.innerHTML);
-      //디바운싱을 적용할 수 있을까?
-      self._handleTitleCallback(e.target.innerHTML);
+      const targetValue = e.target.innerHTML;
+      if (titleTimer) {
+        clearTimeout(titleTimer);
+      }
+      titleTimer = setTimeout(function () {
+        self._handleTitleCallback(targetValue);
+      }, 200);
     });
   }
 
