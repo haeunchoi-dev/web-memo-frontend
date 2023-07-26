@@ -63,7 +63,8 @@ class MemoAdd extends HTMLElement {
       .addEventListener('click', ({ target }) => {
         self.setState({ isModalOpen: !self.state.isModalOpen });
       });
-    this.handleModalClose = this.handleModalClose.bind(this);
+
+    self.handleModalClose = self.handleModalClose.bind(self);
     const memoModal = self.shadow.querySelector('memo-modal');
     if (memoModal) {
       memoModal.handleModalCloseCallback = self.handleModalClose;
