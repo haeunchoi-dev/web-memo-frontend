@@ -52,7 +52,7 @@ class MemoMain extends HTMLElement {
       <div class="main">
         ${this.state.containerList
           .map((o, i) => {
-            return `<text-container index="${o.index}" id="${o.id}" type="${o.type}" text="${o.text}"} ></text-container>`;
+            return `<text-container index="${i}" id="${o.id}" type="${o.type}" text="${o.text}"} ></text-container>`;
           })
           .join('')}
       </div>
@@ -81,7 +81,7 @@ class MemoMain extends HTMLElement {
   initState() {
     this.state = {
       title: '',
-      containerList: [this.createContainer(0)],
+      containerList: [this.createContainer()],
     };
   }
 
@@ -93,9 +93,8 @@ class MemoMain extends HTMLElement {
     console.log(this.state);
   }
 
-  createContainer(index) {
+  createContainer() {
     return {
-      index,
       id: crypto.randomUUID(),
       text: '',
       type: 'text',
@@ -110,14 +109,8 @@ class MemoMain extends HTMLElement {
     let newContainerList = [...this.state.containerList];
     if (valueList.length > 1) {
       newContainerList.splice(index, 1, ...valueList);
-      //index 재조정
       this.setState({
-        containerList: newContainerList.map((container, _i) => {
-          return {
-            ...container,
-            index: _i,
-          };
-        }),
+        containerList: newContainerList,
       });
 
       //focus?

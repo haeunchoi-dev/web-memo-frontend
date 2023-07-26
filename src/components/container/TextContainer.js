@@ -38,7 +38,6 @@ class TextContainer extends HTMLElement {
     $editableDiv.addEventListener('keyup', function (e) {
       let newList = [
         {
-          index: self.index,
           id: self.id,
           type: self.type,
           text: e.target.innerHTML,
