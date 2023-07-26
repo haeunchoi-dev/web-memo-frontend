@@ -52,7 +52,7 @@ class MemoMain extends HTMLElement {
       <div class="main">
         ${this.state.containerList
           .map((o, i) => {
-            return `<text-container index="${i}" id=${o.id} type=${o.type} text="${o.text}"} ></text-container>`;
+            return `<text-container index="${o.index}" id="${o.id}" type="${o.type}" text="${o.text}"} ></text-container>`;
           })
           .join('')}
       </div>
@@ -64,30 +64,6 @@ class MemoMain extends HTMLElement {
 
   setEvent() {
     const self = this;
-
-    self.shadow.querySelector('.main').addEventListener('keypress', (e) => {
-      const isShiftKey = e.shiftKey;
-
-      const keyCode = e.keyCode || e.which;
-
-      if (keyCode === 13 && isShiftKey) {
-        console.log('Shift + Enter pressed');
-      } else if (keyCode === 13) {
-        console.log('Enter pressed');
-
-        const closestContainer = e.target.closest('text-container');
-        console.log(closestContainer);
-        const index = Number(closestContainer.getAttribute('index'));
-        const newContainerList = [...self.state.containerList];
-        newContainerList.splice(index + 1, 0, {
-          //id: index + 1, //id를 생성해주는 로직 작성하기
-          text: '',
-          type: 'text',
-        });
-        self.setState({ containerList: newContainerList });
-        //커서 강제로 이동시키기
-      }
-    });
 
     self.handleTitle = self.handleTitle.bind(self);
     const titleContainer = self.shadow.querySelector('title-container');
@@ -105,7 +81,7 @@ class MemoMain extends HTMLElement {
   initState() {
     this.state = {
       title: '',
-      containerList: [{ text: '', type: 'text' }],
+      containerList: [this.createContainer(0)],
     };
   }
 
@@ -117,14 +93,38 @@ class MemoMain extends HTMLElement {
     console.log(this.state);
   }
 
+  createContainer(index) {
+    return {
+      index,
+      id: crypto.randomUUID(),
+      text: '',
+      type: 'text',
+    };
+  }
+
   handleTitle(value) {
     this.setState({ title: value }, false);
   }
 
-  handleContainerUpdate(index, value) {
-    const newContainerList = [...this.state.containerList];
-    newContainerList[index] = value;
-    this.setState({ containerList: newContainerList }, false);
+  handleContainerUpdate(index, valueList) {
+    let newContainerList = [...this.state.containerList];
+    if (valueList.length > 1) {
+      newContainerList.splice(index, 1, ...valueList);
+      //index 재조정
+      this.setState({
+        containerList: newContainerList.map((container, _i) => {
+          return {
+            ...container,
+            index: _i,
+          };
+        }),
+      });
+
+      //focus?
+    } else {
+      newContainerList[index] = valueList[0];
+      this.setState({ containerList: newContainerList }, false);
+    }
   }
 }
 
