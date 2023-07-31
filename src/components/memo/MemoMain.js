@@ -49,10 +49,10 @@ class MemoMain extends HTMLElement {
   render() {
     const template = `
       <title-container title=${this.state.title}></title-container>
-      <div class="main">
+      <div  class="main">
         ${this.state.containerList
           .map((o, i) => {
-            return `<text-container index="${i}" id="${o.id}" type="${o.type}" text="${o.text}"} ></text-container>`;
+            return `<text-container index="${i}" id="${o.id}" type="${o.type}" text="${o.text}" cursor="${o.startOffset}"} ></text-container>`;
           })
           .join('')}
       </div>
@@ -72,9 +72,16 @@ class MemoMain extends HTMLElement {
     }
 
     self.handleContainerUpdate = self.handleContainerUpdate.bind(self);
+    self.handleContainerArrowUpCallback =
+      self.handleContainerArrowUpCallback.bind(self);
+    self.handleContainerArrowDownCallback =
+      self.handleContainerArrowDownCallback.bind(self);
     const containers = self.shadow.querySelectorAll('text-container');
     containers.forEach((o) => {
       o.handleContainerUpdateCallback = self.handleContainerUpdate;
+      o.handleContainerArrowUpCallback = self.handleContainerArrowUpCallback;
+      o.handleContainerArrowDownCallback =
+        self.handleContainerArrowDownCallback;
     });
   }
 
@@ -89,6 +96,15 @@ class MemoMain extends HTMLElement {
     this.state = { ...this.state, ...newState };
     if (isRender) {
       this.render();
+      //커서 있는 곳 포커스
+      let focusIndex = 0;
+      this.state.containerList.forEach((c, _i) => {
+        if (c.focus) {
+          focusIndex = _i;
+        }
+      });
+      const containers = this.shadow.querySelectorAll('text-container');
+      containers[focusIndex].setFocus();
     }
     console.log(this.state);
   }
@@ -106,17 +122,49 @@ class MemoMain extends HTMLElement {
   }
 
   handleContainerUpdate(index, valueList) {
-    let newContainerList = [...this.state.containerList];
+    let newContainerList = this.state.containerList.map((c) => {
+      return { ...c, focus: false };
+    });
     if (valueList.length > 1) {
       newContainerList.splice(index, 1, ...valueList);
       this.setState({
         containerList: newContainerList,
       });
-
-      //focus?
     } else {
       newContainerList[index] = valueList[0];
       this.setState({ containerList: newContainerList }, false);
+    }
+  }
+
+  handleContainerArrowUpCallback(index) {
+    let newContainerList = this.state.containerList.map((c) => {
+      return { ...c, focus: false };
+    });
+    if (index !== 0) {
+      newContainerList[index - 1] = {
+        ...newContainerList[index - 1],
+        focus: true,
+        startOffset: newContainerList[index].startOffset,
+      };
+      this.setState({
+        containerList: newContainerList,
+      });
+    }
+  }
+
+  handleContainerArrowDownCallback(index) {
+    let newContainerList = this.state.containerList.map((c) => {
+      return { ...c, focus: false };
+    });
+    if (index !== this.state.containerList.length - 1) {
+      newContainerList[index + 1] = {
+        ...newContainerList[index + 1],
+        focus: true,
+        startOffset: newContainerList[index].startOffset,
+      };
+      this.setState({
+        containerList: newContainerList,
+      });
     }
   }
 }

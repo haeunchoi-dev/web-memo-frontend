@@ -35,35 +35,58 @@ class TextContainer extends HTMLElement {
     const self = this;
 
     const $editableDiv = self.shadow.querySelector('div');
-    $editableDiv.addEventListener('keyup', function (e) {
-      let newList = [
-        {
-          id: self.id,
-          type: self.type,
-          text: e.target.innerHTML,
-        },
-      ];
-      self._handleContainerUpdateCallback(self.index, newList);
-    });
 
-    $editableDiv.addEventListener('keypress', function (e) {
+    function changeContainer(e) {
+      const key = e.key;
+      if (key !== 'ArrowUp' && key !== 'ArrowDown') {
+        const startOffset = self.shadow
+          .getSelection()
+          .getRangeAt(0).startOffset;
+        let newList = [
+          {
+            id: self.id,
+            type: self.type,
+            text: e.target.innerHTML,
+            focus: true,
+            startOffset,
+          },
+        ];
+        self._handleContainerUpdateCallback(self.index, newList);
+      }
+    }
+
+    $editableDiv.addEventListener('keyup', changeContainer);
+    $editableDiv.addEventListener('click', changeContainer);
+
+    $editableDiv.addEventListener('keydown', function (e) {
       const isShiftKey = e.shiftKey;
       const key = e.key;
       if (key === 'Enter' && !isShiftKey) {
-        console.log('Enter pressed');
         e.preventDefault();
-
         const newList = self.getNewContainerByCursor();
         self._handleContainerUpdateCallback(self.index, newList);
+      } else if (key === 'ArrowUp') {
+        //TODO:div의 맨윗줄일때
+        console.log('위');
+        e.preventDefault();
+        self._handleContainerArrowUpCallback(self.index);
+      } else if (key === 'ArrowDown') {
+        //TODO:div의 맨 아랫줄일때
+        console.log('아래');
+        e.preventDefault();
+        self._handleContainerArrowDownCallback(self.index);
       }
     });
+
+    $editableDiv.addEventListener('focus', function (e) {});
   }
 
-  createTextContainer(text) {
+  createTextContainer(text, focus = false) {
     return {
       id: crypto.randomUUID(),
       text,
       type: 'text',
+      focus,
     };
   }
 
@@ -136,19 +159,21 @@ class TextContainer extends HTMLElement {
         textAfterCursor = after + getAfter(cursorIndex, parentDiv.childNodes);
       } else {
         //br에서 엔터시
-        textBeforeCursor = getBefor(cursorIndex, parentDiv.childNodes);
-        textAfterCursor = '<br/>' + getAfter(cursorIndex, parentDiv.childNodes);
+        const befor = parentDiv.childNodes[cursorIndex];
+        textBeforeCursor =
+          getBefor(cursorIndex, parentDiv.childNodes) +
+          (befor ? befor.outerHTML : '');
+        textAfterCursor = '<br>' + getAfter(cursorIndex, parentDiv.childNodes);
       }
     }
 
     return [
       this.createTextContainer(textBeforeCursor),
-      this.createTextContainer(textAfterCursor),
+      this.createTextContainer(textAfterCursor, true),
     ];
   }
 
   initState() {
-    console.log(this.index, this.text);
     this.state = { isModalOpen: false };
   }
 
@@ -159,6 +184,14 @@ class TextContainer extends HTMLElement {
 
   set handleContainerUpdateCallback(callback) {
     this._handleContainerUpdateCallback = callback;
+  }
+
+  set handleContainerArrowUpCallback(callback) {
+    this._handleContainerArrowUpCallback = callback;
+  }
+
+  set handleContainerArrowDownCallback(callback) {
+    this._handleContainerArrowDownCallback = callback;
   }
 
   get index() {
@@ -175,6 +208,25 @@ class TextContainer extends HTMLElement {
 
   get text() {
     return this.getAttribute('text') || '';
+  }
+
+  get cursor() {
+    const offset = this.getAttribute('cursor') || '';
+    return isNaN(offset) ? 0 : Number(offset);
+  }
+
+  setFocus() {
+    console.log('포커스됨');
+    this.shadow.querySelector('div').focus();
+    // console.log(this.cursor);
+    // if (this.cursor !== 0) {
+    //   const selection = this.shadow.getSelection();
+    //   console.log(selection.getRangeAt(0).endContainer);
+    //   const range = selection.getRangeAt(0);
+    //   const node = this.shadow.querySelector('div');
+    //   range.setStart(node.firstChild, 0);
+    //   range.setEnd(node, this.cursor);
+    // }
   }
 }
 
