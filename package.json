@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "live-server src --verbose"
+    "prestart": "node build.js",
+    "start": "live-server src --verbose",
+    "build": "node build.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +14,8 @@
     "cypress": "^12.13.0",
     "live-server": "^1.2.2",
     "prettier": "3.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
   }
 }
