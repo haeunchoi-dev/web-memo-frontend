@@ -27,7 +27,7 @@ class TitleContainer extends HTMLElement {
 
   render() {
     const template = `
-        <h2 contenteditable="true">${this.title}</h2>
+        <h2 contenteditable="${!this.mode}">${this.title}</h2>
     `;
 
     this.shadow.innerHTML = template;
@@ -96,6 +96,11 @@ class TitleContainer extends HTMLElement {
   set handleTitleCallback(callback) {
     //console.log(callback);
     this._handleTitleCallback = callback;
+  }
+
+  get mode() {
+    const mode = this.getAttribute('mode');
+    return mode && mode === 'view' ? true : false;
   }
 }
 

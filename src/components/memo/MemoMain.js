@@ -1,5 +1,6 @@
 import '../container/TitleContainer.js';
 import '../container/TextContainer.js';
+import MemoStore from '../../libs/MemoStore.js';
 
 class MemoMain extends HTMLElement {
   constructor() {
@@ -86,10 +87,17 @@ class MemoMain extends HTMLElement {
   }
 
   initState() {
-    this.state = {
-      title: '',
-      containerList: [this.createContainer()],
-    };
+    console.log(this.memoId);
+    console.log(MemoStore.findById(this.memoId));
+    let memo = MemoStore.findById(this.memoId);
+    if (!memo) {
+      memo = {
+        id: this.memoId,
+        title: '',
+        containerList: [this.createContainer()],
+      };
+    }
+    this.state = memo;
   }
 
   setState(newState, isRender = true) {
@@ -119,6 +127,11 @@ class MemoMain extends HTMLElement {
 
   handleTitle(value) {
     this.setState({ title: value }, false);
+    //update store (title)
+    MemoStore.update({
+      id: this.state.id,
+      title: value,
+    });
   }
 
   handleContainerUpdate(index, valueList) {
@@ -134,6 +147,11 @@ class MemoMain extends HTMLElement {
       newContainerList[index] = valueList[0];
       this.setState({ containerList: newContainerList }, false);
     }
+
+    MemoStore.update({
+      id: this.state.id,
+      containerList: newContainerList,
+    });
   }
 
   handleContainerArrowUpCallback(index) {
@@ -166,6 +184,10 @@ class MemoMain extends HTMLElement {
         containerList: newContainerList,
       });
     }
+  }
+
+  get memoId() {
+    return this.getAttribute('memoId') || crypto.randomUUID();
   }
 }
 

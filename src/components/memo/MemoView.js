@@ -1,8 +1,12 @@
 import './MemoModal.js';
+import './MemoSummary.js';
+
 class MemoView extends HTMLElement {
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: 'open' });
+
+    this.initState();
   }
 
   connectedCallback() {
@@ -25,10 +29,9 @@ class MemoView extends HTMLElement {
         position: relative;
         height: 300px;
         width: 300px;
-        text-align: center;
-        line-height: 300px;
         border-radius: 0.25rem;
         cursor: pointer;
+        padding: 0 10px;
       }
     `;
 
@@ -39,13 +42,51 @@ class MemoView extends HTMLElement {
   render() {
     const template = `
         <div class="memo">
-            
+          <memo-summary memoId="${this.memoId}" mode="view"></memo-summary>
         </div>
-        <memo-modal isOpen=${false}></memo-modal>
+        <memo-modal memoId="${this.memoId}" isOpen=${this.state.isModalOpen}></memo-modal>
     `;
 
     this.shadow.innerHTML = template;
     this.setStyle();
+    this.setEvent();
+  }
+
+  setEvent() {
+    const self = this;
+    self.shadow
+      .querySelector('.memo')
+      .addEventListener('click', ({ target }) => {
+        self.setState({ isModalOpen: !self.state.isModalOpen });
+      });
+
+    self.handleModalClose = self.handleModalClose.bind(self);
+    const memoModal = self.shadow.querySelector('memo-modal');
+    if (memoModal) {
+      memoModal.handleModalCloseCallback = self.handleModalClose;
+    }
+  }
+
+  initState() {
+    this.state = { isModalOpen: false };
+  }
+
+  setState(newState) {
+    this.state = { ...this.state, ...newState };
+    this.render();
+  }
+
+  get memoId() {
+    return this.getAttribute('memoId') || crypto.randomUUID();
+  }
+
+  handleModalClose() {
+    this.setState({ isModalOpen: false });
+    this._handleEditCloseCallback();
+  }
+
+  set handleEditCloseCallback(callback) {
+    this._handleEditCloseCallback = callback;
   }
 }
 

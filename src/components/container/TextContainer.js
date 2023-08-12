@@ -23,7 +23,7 @@ class TextContainer extends HTMLElement {
 
   render() {
     const template = `
-        <div contenteditable="true">${this.text}</div>
+        <div contenteditable="${!this.mode}">${this.text}</div>
       `;
 
     this.shadow.innerHTML = template;
@@ -213,6 +213,11 @@ class TextContainer extends HTMLElement {
   get cursor() {
     const offset = this.getAttribute('cursor') || '';
     return isNaN(offset) ? 0 : Number(offset);
+  }
+
+  get mode() {
+    const mode = this.getAttribute('mode');
+    return mode && mode === 'view' ? true : false;
   }
 
   setFocus() {

@@ -1,4 +1,5 @@
 import './MemoModal.js';
+import MemoStore from '../../libs/MemoStore.js';
 
 class MemoAdd extends HTMLElement {
   constructor() {
@@ -48,7 +49,7 @@ class MemoAdd extends HTMLElement {
         <div class="memo">
             <img src="./assets/plus.png" width="100px" />
         </div>
-        <memo-modal isOpen=${this.state.isModalOpen} ></memo-modal>
+        <memo-modal memoId="${this.state.id}" isOpen=${this.state.isModalOpen} ></memo-modal>
     `;
 
     this.shadow.innerHTML = template;
@@ -61,6 +62,18 @@ class MemoAdd extends HTMLElement {
     self.shadow
       .querySelector('.memo')
       .addEventListener('click', ({ target }) => {
+        //localstorage insert
+        MemoStore.insert({
+          id: self.state.id,
+          title: '',
+          containerList: [
+            {
+              id: crypto.randomUUID(),
+              text: '',
+              type: 'text',
+            },
+          ],
+        });
         self.setState({ isModalOpen: !self.state.isModalOpen });
       });
 
@@ -72,7 +85,7 @@ class MemoAdd extends HTMLElement {
   }
 
   initState() {
-    this.state = { isModalOpen: false };
+    this.state = { isModalOpen: false, id: crypto.randomUUID() };
   }
 
   setState(newState) {
@@ -82,6 +95,20 @@ class MemoAdd extends HTMLElement {
 
   handleModalClose() {
     this.setState({ isModalOpen: false });
+    //id로 검색후 title이 비었고 list가 비었으면 삭제
+    const newMemo = MemoStore.findById(this.state.id);
+    if (
+      newMemo.title.replace(/&nbsp;/g, '').trim() === '' &&
+      (newMemo.containerList.length === 0 ||
+        newMemo.containerList[0].text.replace(/&nbsp;/g, '').trim() === '')
+    ) {
+      MemoStore.remove({ id: this.state.id });
+    }
+    this._handleEditCloseCallback();
+  }
+
+  set handleEditCloseCallback(callback) {
+    this._handleEditCloseCallback = callback;
   }
 }
 

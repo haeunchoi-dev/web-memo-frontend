@@ -76,7 +76,7 @@ class MemoModal extends HTMLElement {
   render() {
     const template = `
     <div class="modal">
-      <memo-main></memo-main>
+      <memo-main memoId="${this.memoId}"></memo-main>
       <a class="modal_close_btn">닫기</a>
     </div>
     <div class="modal_bg"></div>  
@@ -95,6 +95,11 @@ class MemoModal extends HTMLElement {
         self._handleModalCloseCallback(false);
       });
   }
+
+  get memoId() {
+    return this.getAttribute('memoId') || crypto.randomUUID();
+  }
+
   get isOpen() {
     return this.getAttribute('isOpen') || false;
   }

@@ -1,10 +1,18 @@
 import './MemoAdd.js';
 import './MemoView.js';
+import MemoStore from '../../libs/MemoStore.js';
 
 class MemoList extends HTMLElement {
   constructor() {
     super();
+    this.connectedStore();
     this.shadow = this.attachShadow({ mode: 'open' });
+
+    this.initState();
+  }
+
+  connectedStore() {
+    console.log(MemoStore.selectAll());
   }
 
   connectedCallback() {
@@ -30,11 +38,45 @@ class MemoList extends HTMLElement {
     const template = `
     <section class="memo-list">
         <memo-add></memo-add>
+        ${this.state
+          .map((data) => {
+            return `<memo-view memoId="${data.id}"></memo-view>`;
+          })
+          .join('')}
     </section>
     `;
 
     this.shadow.innerHTML = template;
     this.setStyle();
+    this.setEvent();
+  }
+
+  setEvent() {
+    const self = this;
+
+    self.handleEditClose = self.handleEditClose.bind(self);
+    const memoAdd = self.shadow.querySelector('memo-add');
+    if (memoAdd) {
+      memoAdd.handleEditCloseCallback = self.handleEditClose;
+    }
+
+    const memoList = self.shadow.querySelectorAll('memo-view');
+    memoList.forEach((memo) => {
+      memo.handleEditCloseCallback = self.handleEditClose;
+    });
+  }
+
+  initState() {
+    this.state = MemoStore.selectAll();
+  }
+
+  reRender() {
+    this.state = MemoStore.selectAll();
+    this.render();
+  }
+
+  handleEditClose() {
+    this.reRender();
   }
 }
 
