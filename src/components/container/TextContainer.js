@@ -28,7 +28,9 @@ class TextContainer extends HTMLElement {
 
     this.shadow.innerHTML = template;
     this.setStyle();
-    this.setEvent();
+    if (!this.mode) {
+      this.setEvent();
+    }
   }
 
   setEvent() {
