@@ -11,7 +11,6 @@ class MemoView extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('memo view start');
     this.render();
   }
 

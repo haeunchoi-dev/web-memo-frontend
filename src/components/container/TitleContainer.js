@@ -94,7 +94,6 @@ class TitleContainer extends HTMLElement {
   }
 
   set handleTitleCallback(callback) {
-    //console.log(callback);
     this._handleTitleCallback = callback;
   }
 

@@ -7,7 +7,6 @@ class MemoModal extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('connect modal', this.isOpen);
     this.render();
   }
 

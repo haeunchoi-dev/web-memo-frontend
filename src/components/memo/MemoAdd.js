@@ -10,7 +10,6 @@ class MemoAdd extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('memo add start');
     this.render();
   }
 

@@ -2,21 +2,13 @@ import './common/Header.js';
 import './common/Aside.js';
 import './memo/MemoList.js';
 
-import Store from '../libs/store.js';
-
 class MemoApp extends HTMLElement {
   constructor() {
     super();
-    this.connectedStore();
     this.shadow = this.attachShadow({ mode: 'open' });
   }
 
-  connectedStore() {
-    this.store = new Store('memo-vanilla-es6');
-  }
-
   connectedCallback() {
-    console.log('memo start');
     this.render();
   }
 

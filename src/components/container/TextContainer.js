@@ -67,12 +67,10 @@ class TextContainer extends HTMLElement {
         self._handleContainerUpdateCallback(self.index, newList);
       } else if (key === 'ArrowUp') {
         //TODO:div의 맨윗줄일때
-        console.log('위');
         e.preventDefault();
         self._handleContainerArrowUpCallback(self.index);
       } else if (key === 'ArrowDown') {
         //TODO:div의 맨 아랫줄일때
-        console.log('아래');
         e.preventDefault();
         self._handleContainerArrowDownCallback(self.index);
       }
@@ -221,7 +219,7 @@ class TextContainer extends HTMLElement {
   }
 
   setFocus() {
-    console.log('포커스됨');
+    //console.log('포커스됨');
     this.shadow.querySelector('div').focus();
     // console.log(this.cursor);
     // if (this.cursor !== 0) {

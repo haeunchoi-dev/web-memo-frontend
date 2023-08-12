@@ -10,7 +10,6 @@ class MemoMain extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('connect memo main', this.isOpen);
     this.render();
   }
 
@@ -87,8 +86,6 @@ class MemoMain extends HTMLElement {
   }
 
   initState() {
-    console.log(this.memoId);
-    console.log(MemoStore.findById(this.memoId));
     let memo = MemoStore.findById(this.memoId);
     if (!memo) {
       memo = {
@@ -114,7 +111,6 @@ class MemoMain extends HTMLElement {
       const containers = this.shadow.querySelectorAll('text-container');
       containers[focusIndex].setFocus();
     }
-    console.log(this.state);
   }
 
   createContainer() {

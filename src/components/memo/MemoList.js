@@ -5,18 +5,12 @@ import MemoStore from '../../libs/MemoStore.js';
 class MemoList extends HTMLElement {
   constructor() {
     super();
-    this.connectedStore();
     this.shadow = this.attachShadow({ mode: 'open' });
 
     this.initState();
   }
 
-  connectedStore() {
-    console.log(MemoStore.selectAll());
-  }
-
   connectedCallback() {
-    console.log('memo list start');
     this.render();
   }
 
