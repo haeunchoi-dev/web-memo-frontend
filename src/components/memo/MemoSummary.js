@@ -20,7 +20,7 @@ class MemoSummary extends HTMLElement {
 
     style.textContent = `
         .main {
-          height: ${this.mode ? '230px' : '500px'};
+          height: ${this.mode ? '200px' : '500px'};
           overflow-y: auto;
         }
 
